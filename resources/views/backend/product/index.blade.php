@@ -4,7 +4,6 @@
 
 @section('content')
     <!-- Page Heading -->
-    <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Product</h1>
         <a href="{{route('product.create')}}" class="btn btn-sm btn-primary shadow-sm">
@@ -49,6 +48,7 @@
                             <th>Nama</th>
                             <th>Stok</th>
                             <th>Supplier</th>
+                            <th>Harga Jual</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -56,10 +56,11 @@
                         @foreach ($products as $product)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $product->code }}</td>
+                                <td><a href="{{ route('product.show', $product->id)}}">{{ $product->code }}</a></td>
                                 <td>{{ $product->name }}</td>
                                 <td>{{ $product->stock }}</td>
-                                <td>{{ $product->supplier_id }}</td>
+                                <td>{{ $product->supplier->name }}</td>
+                                <td>Rp. {{number_format($product->sell,2, ',' , '.')}}</td>
                                 <td>
                                     <a href="{{ route('product.edit', $product->id)}}" class="btn btn-info btn-sm">Edit</a>
                                     <form action="{{ route('product.destroy',$product->id)}}" method="POST" class="d-inline">
@@ -76,3 +77,4 @@
         </div>
     </div>
 @endsection
+

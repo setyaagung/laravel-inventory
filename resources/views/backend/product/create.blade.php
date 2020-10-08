@@ -15,7 +15,7 @@
                 @csrf
                 <div class="form-group">
                     <label>Supplier</label>
-                    <select class="form-control select2" name="supplier_id">
+                    <select class="form-control select2bs4" name="supplier_id">
                         @foreach ($suppliers as $supplier)
                             <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
                         @endforeach
@@ -23,11 +23,52 @@
                 </div>
                 <div class="form-group">
                     <label>Kode</label>
-                    <input type="text" class="form-control" name="code" value="{{ old('code')}}">
+                    <input type="text" class="form-control" name="code" value="{{ $code }}" readonly>
                 </div>
                 <div class="form-group">
                     <label>Nama</label>
-                    <input type="text" class="form-control" name="name" value="{{ old('name')}}">
+                    <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name')}}">
+                    @error('name')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label>Stok</label>
+                    <input type="number" class="form-control @error('stock') is-invalid @enderror" name="stock" value="{{ old('stock')}}">
+                    @error('stock')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label>Minimal Stok</label>
+                    <input type="number" class="form-control @error('minimum_stock') is-invalid @enderror" name="minimum_stock" value="{{ old('minimum_stock')}}">
+                    @error('minimum_stock')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label>Harga Beli</label>
+                    <input type="number" class="form-control @error('buy') is-invalid @enderror" name="buy" value="{{ old('buy')}}">
+                    @error('buy')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label>Harga Jual</label>
+                    <input type="number" class="form-control @error('sell') is-invalid @enderror" name="sell" value="{{ old('sell')}}">
+                    @error('sell')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
                 </div>
                 <div class="float-right">
                     <a href="{{ route('product.index')}}" class="btn btn-secondary">Kembali</a>

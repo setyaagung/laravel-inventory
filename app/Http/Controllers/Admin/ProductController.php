@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Admin\Product;
 use App\Admin\Supplier;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductRequest;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -28,7 +29,8 @@ class ProductController extends Controller
     public function create()
     {
         $suppliers = Supplier::orderBy('name', 'ASC')->get();
-        return view('backend.product.create', compact('suppliers'));
+        $code = rand();
+        return view('backend.product.create', compact('suppliers', 'code'));
     }
 
     /**
@@ -37,9 +39,12 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        //
+        $data = $request->all();
+
+        Product::create($data);
+        return redirect()->route('product.index')->with('create', 'Produk baru berhasil ditambahkan');
     }
 
     /**
@@ -50,7 +55,8 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        //
+        $product = Product::with(['supplier'])->findOrFail($id);
+        return view('backend.product.detail', compact('product'));
     }
 
     /**
@@ -84,6 +90,8 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $product = Product::findOrFail($id);
+        $product->delete();
+        return redirect()->route('product.index')->with('delete', 'Product berhasil dihapus');
     }
 }
