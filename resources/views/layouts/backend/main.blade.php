@@ -17,6 +17,8 @@
 
     <!-- Custom styles for this template-->
     <link href="{{ asset('backend/css/sb-admin-2.min.css')}}" rel="stylesheet">
+    <link href="{{ asset('backend/css/select2.min.css')}}" rel="stylesheet">
+    <link href="{{ asset('backend/css/select2-bootstrap4.min.css')}}" rel="stylesheet">
     <link href="{{ asset('backend/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
 
 </head>
@@ -98,11 +100,22 @@
 
     <!-- Custom scripts for all pages-->
     <script src="{{ asset('backend/js/sb-admin-2.min.js')}}"></script>
+    <script src="{{ asset('backend/js/select2.full.min.js')}}"></script>
     <script src="{{ asset('backend/vendor/datatables/jquery.dataTables.min.js')}}"></script>
     <script src="{{ asset('backend/vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
 
     <!-- Page level custom scripts -->
     <script src="{{ asset('backend/js/demo/datatables-demo.js')}}"></script>
+    <script>
+        $(function(){
+            $('.select2').select2()
+
+            //Initialize Select2 Elements
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            })
+        });
+    </script>
 
 </body>
 

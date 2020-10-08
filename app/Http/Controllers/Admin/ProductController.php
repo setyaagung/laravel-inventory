@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Admin\Product;
 use App\Admin\Supplier;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class SupplierController extends Controller
+class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +16,8 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        $suppliers = Supplier::all();
-        return view('backend.supplier.index', compact('suppliers'));
+        $products = Product::with(['supplier'])->get();
+        return view('backend.product.index', compact('products'));
     }
 
     /**
@@ -26,7 +27,8 @@ class SupplierController extends Controller
      */
     public function create()
     {
-        return view('backend.supplier.create');
+        $suppliers = Supplier::orderBy('name', 'ASC')->get();
+        return view('backend.product.create', compact('suppliers'));
     }
 
     /**
@@ -37,10 +39,7 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-
-        Supplier::create($data);
-        return redirect()->route('supplier.index')->with('create', 'Supplier baru berhasil ditambahkan');
+        //
     }
 
     /**
@@ -62,8 +61,7 @@ class SupplierController extends Controller
      */
     public function edit($id)
     {
-        $supplier = Supplier::findOrFail($id);
-        return view('backend.supplier.edit', compact('supplier'));
+        //
     }
 
     /**
@@ -75,11 +73,7 @@ class SupplierController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $supplier = Supplier::findOrFail($id);
-        $data = $request->all();
-
-        $supplier->update($data);
-        return redirect()->route('supplier.index')->with('update', 'Supplier berhasil diperbarui');
+        //
     }
 
     /**
@@ -90,8 +84,6 @@ class SupplierController extends Controller
      */
     public function destroy($id)
     {
-        $supplier = Supplier::findOrFail($id);
-        $supplier->delete();
-        return redirect()->route('supplier.index')->with('delete', 'Supplier berhasil dihapus');
+        //
     }
 }

@@ -23,4 +23,5 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::namespace('Admin')->middleware(['auth'])->group(function () {
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
     Route::resource('supplier', 'SupplierController');
+    Route::resource('product', 'ProductController');
 });

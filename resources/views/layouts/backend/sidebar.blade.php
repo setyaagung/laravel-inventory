@@ -24,6 +24,12 @@
         <span>Supplier</span>
         </a>
     </li>
+    <li class="nav-item {{ (request()->segment(1) == 'product') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('product.index')}}">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+        <span>Product</span>
+        </a>
+    </li>
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">

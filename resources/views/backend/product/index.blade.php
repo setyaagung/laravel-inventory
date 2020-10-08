@@ -1,13 +1,13 @@
 @extends('layouts.backend.main')
 
-@section('title','Supplier')
+@section('title','Product')
 
 @section('content')
     <!-- Page Heading -->
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Supplier</h1>
-        <a href="{{route('supplier.create')}}" class="btn btn-sm btn-primary shadow-sm">
+        <h1 class="h3 mb-0 text-gray-800">Product</h1>
+        <a href="{{route('product.create')}}" class="btn btn-sm btn-primary shadow-sm">
             Tambah
         </a>
     </div>
@@ -45,24 +45,24 @@
                     <thead>
                         <tr>
                             <th>No</th>
+                            <th>Kode</th>
                             <th>Nama</th>
-                            <th>Alamat</th>
-                            <th>Telp. Kantor</th>
-                            <th>No. HP</th>
+                            <th>Stok</th>
+                            <th>Supplier</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($suppliers as $supplier)
+                        @foreach ($products as $product)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $supplier->name }}</td>
-                                <td>{{ $supplier->address }}</td>
-                                <td>{{ $supplier->phone }}</td>
-                                <td>{{ $supplier->mobile }}</td>
+                                <td>{{ $product->code }}</td>
+                                <td>{{ $product->name }}</td>
+                                <td>{{ $product->stock }}</td>
+                                <td>{{ $product->supplier_id }}</td>
                                 <td>
-                                    <a href="{{ route('supplier.edit', $supplier->id)}}" class="btn btn-info btn-sm">Edit</a>
-                                    <form action="{{ route('supplier.destroy',$supplier->id)}}" method="POST" class="d-inline">
+                                    <a href="{{ route('product.edit', $product->id)}}" class="btn btn-info btn-sm">Edit</a>
+                                    <form action="{{ route('product.destroy',$product->id)}}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin dihapus?')">Hapus</button>
