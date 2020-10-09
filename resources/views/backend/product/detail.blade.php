@@ -10,50 +10,51 @@
 
     <div class="card shadow mb-4">
         <div class="card-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <table style="width: 100%">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <tbody>
                         <tr>
-                            <td>Supplier</td>
+                            <th>Barcode</th>
                             <td>:</td>
-                            <td>{{ $product->supplier->name }}</td>
-                        </tr>
-                        <tr>
-                            <td>Kode</td>
-                            <td>:</td>
-                            <td>{{ $product->code }}</td>
-                        </tr>
-                        <tr>
-                            <td>Nama</td>
+                            <td>{!! \DNS1D::getBarcodeHTML($product->code, 'I25+'); !!}</td>
+                            <th>Nama</th>
                             <td>:</td>
                             <td>{{ $product->name }}</td>
                         </tr>
                         <tr>
-                            <td>Stok</td>
+                            <th>Supplier</th>
                             <td>:</td>
-                            <td>{{ $product->stock }}</td>
+                            <td>{{ $product->supplier->name}}</td>
+                            <th>Kode</th>
+                            <td>:</td>
+                            <td>{{ $product->code }}</td>
                         </tr>
-                    </table>
-                </div>
-                <div class="col-md-6">
-                    <table style="width: 100%">
                         <tr>
-                            <td>Minimal Stok</td>
+                            <th>Stok</th>
+                            <td>:</td>
+                            <td>{{ $product->stock}}</td>
+                            <th>Minimal Stok</th>
                             <td>:</td>
                             <td>{{ $product->minimum_stock }}</td>
                         </tr>
                         <tr>
-                            <td>Harga Beli</td>
+                            <th>Harga Beli</th>
                             <td>:</td>
-                            <td>Rp. {{number_format($product->buy,2, ',' , '.')}}</td>
+                            <td>Rp. {{ (number_format($product->buy,2,',','.')) }}</td>
+                            <th>Harga Jual</th>
+                            <td>:</td>
+                            <td>Rp. {{ (number_format($product->sell,2,',','.')) }}</td>
                         </tr>
                         <tr>
-                            <td>Harga Jual</td>
+                            <th>Dibuat</th>
                             <td>:</td>
-                            <td>Rp. {{number_format($product->sell,2, ',' , '.')}}</td>
+                            <td>{{ date('d F Y H:i', strtotime($product->created_at)) }}</td>
+                            <th>Diperbarui</th>
+                            <td>:</td>
+                            <td>{{ date('d F Y H:i', strtotime($product->updated_at)) }}</td>
                         </tr>
-                    </table>
-                </div>
+                    </tbody>
+                </table>
             </div>
             <div class="float-right">
                 <a href="{{ route('product.index')}}" class="btn btn-secondary">Kembali</a>

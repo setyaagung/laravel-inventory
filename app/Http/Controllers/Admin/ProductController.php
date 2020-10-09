@@ -17,7 +17,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with(['supplier'])->get();
+        $products = Product::with(['supplier'])->orderBy('name', 'ASC')->get();
         return view('backend.product.index', compact('products'));
     }
 
@@ -29,7 +29,7 @@ class ProductController extends Controller
     public function create()
     {
         $suppliers = Supplier::orderBy('name', 'ASC')->get();
-        $code = rand();
+        $code = rand(10000000000, 99999999999);
         return view('backend.product.create', compact('suppliers', 'code'));
     }
 
@@ -42,7 +42,7 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         $data = $request->all();
-
+        $data['stock'] = 0;
         Product::create($data);
         return redirect()->route('product.index')->with('create', 'Produk baru berhasil ditambahkan');
     }
@@ -67,7 +67,9 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
+        $product = Product::findOrFail($id);
+        $suppliers = Supplier::all();
+        return view('backend.product.edit', compact('product', 'suppliers'));
     }
 
     /**
@@ -77,9 +79,13 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request, $id)
     {
-        //
+        $product = Product::findOrFail($id);
+        $data = $request->all();
+        $product->update($data);
+
+        return redirect()->route('product.index')->with('create', 'Produk baru berhasil ditambahkan');
     }
 
     /**

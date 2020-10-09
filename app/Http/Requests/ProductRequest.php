@@ -25,7 +25,6 @@ class ProductRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'stock' => 'required',
             'minimum_stock' => 'required',
             'buy' => 'required',
             'sell' => 'required'
@@ -35,7 +34,6 @@ class ProductRequest extends FormRequest
     {
         return [
             'name.required' => 'Nama produk harus diisi',
-            'stock.required' => 'Stok produk harus diisi',
             'minimum_stock.required' => 'Minimal stok produk harus diisi',
             'buy.required' => 'Harga beli produk harus diisi',
             'sell.required' => 'Harga jual produk harus diisi',
