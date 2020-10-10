@@ -24,4 +24,6 @@ Route::namespace('Admin')->middleware(['auth'])->group(function () {
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
     Route::resource('supplier', 'SupplierController');
     Route::resource('product', 'ProductController');
+    Route::resource('purchase', 'PurchaseController');
+    Route::get('/purchase/product/{supplier}', 'PurchaseController@getProduct')->name('purchase.getProduct');
 });

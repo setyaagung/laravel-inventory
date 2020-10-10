@@ -24,6 +24,7 @@ class ProductRequest extends FormRequest
     public function rules()
     {
         return [
+            'supplier_id' => 'required',
             'name' => 'required',
             'minimum_stock' => 'required',
             'buy' => 'required',
@@ -33,6 +34,7 @@ class ProductRequest extends FormRequest
     public function messages()
     {
         return [
+            'supplier_id.required' => 'Wajib untuk memilih supplier produk',
             'name.required' => 'Nama produk harus diisi',
             'minimum_stock.required' => 'Minimal stok produk harus diisi',
             'buy.required' => 'Harga beli produk harus diisi',

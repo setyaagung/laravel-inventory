@@ -34,7 +34,16 @@
 
             @if ($message = Session::get('delete'))
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Perbarui!</strong> {{ $message }}.
+                    <strong>Dihapus!</strong> {{ $message }}.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+
+            @if ($message = Session::get('cant-delete'))
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>Gagal!</strong> {{ $message }}.
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

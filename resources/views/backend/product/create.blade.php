@@ -15,11 +15,17 @@
                 @csrf
                 <div class="form-group">
                     <label>Supplier</label>
-                    <select class="form-control select2bs4" name="supplier_id">
+                    <select class="form-control select2bs4 @error('supplier_id') is-invalid @enderror" name="supplier_id" style="width: 100%">
+                        <option value="">-- Pilih Supplier --</option>
                         @foreach ($suppliers as $supplier)
                             <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
                         @endforeach
                     </select>
+                    @error('supplier_id')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
                 </div>
                 <div class="form-group">
                     <label>Kode</label>
@@ -36,7 +42,7 @@
                 </div>
                 <div class="form-group">
                     <label>Minimal Stok</label>
-                    <input type="number" class="form-control @error('minimum_stock') is-invalid @enderror" name="minimum_stock" value="{{ old('minimum_stock')}}">
+                    <input type="number" class="form-control @error('minimum_stock') is-invalid @enderror" name="minimum_stock" value="5">
                     @error('minimum_stock')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>

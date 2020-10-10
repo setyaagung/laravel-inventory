@@ -15,7 +15,7 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        $suppliers = Supplier::all();
+        $suppliers = Supplier::orderBy('name', 'ASC')->get();
         return view('backend.supplier.index', compact('suppliers'));
     }
 
@@ -91,6 +91,9 @@ class SupplierController extends Controller
     public function destroy($id)
     {
         $supplier = Supplier::findOrFail($id);
+        if ($supplier->products()->count()) {
+            return back()->with('cant-delete', 'Supplier tidak dapat dihapus karena sudah terhubung dengan data produk');
+        }
         $supplier->delete();
         return redirect()->route('supplier.index')->with('delete', 'Supplier berhasil dihapus');
     }

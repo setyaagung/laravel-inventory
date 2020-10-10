@@ -23,7 +23,8 @@ class CreateProductsTable extends Migration
             $table->decimal('buy', 15, 2);
             $table->decimal('sell', 15, 2);
             $table->timestamps();
-            $table->softDeletes();
+
+            $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('restrict');
         });
     }
 
