@@ -48,10 +48,10 @@
                         <tr>
                             <th>Dibuat</th>
                             <td>:</td>
-                            <td>{{ date('d F Y H:i', strtotime($product->created_at)) }}</td>
+                            <td>{{ $product->created_at->isoFormat('D MMMM Y') }}</td>
                             <th>Diperbarui</th>
                             <td>:</td>
-                            <td>{{ date('d F Y H:i', strtotime($product->updated_at)) }}</td>
+                            <td>{{ $product->updated_at->isoFormat('D MMMM Y') }}</td>
                         </tr>
                     </tbody>
                 </table>

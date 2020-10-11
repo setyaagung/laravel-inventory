@@ -25,5 +25,7 @@ Route::namespace('Admin')->middleware(['auth'])->group(function () {
     Route::resource('supplier', 'SupplierController');
     Route::resource('product', 'ProductController');
     Route::resource('purchase', 'PurchaseController');
-    Route::get('/purchase/product/{supplier}', 'PurchaseController@getProduct')->name('purchase.getProduct');
+    Route::get('/purchase/product/{supplier}', 'PurchaseController@getProduct');
+    Route::get('/purchase/approved/{purchase}', 'PurchaseController@approved')->name('purchase.approved');
+    Route::delete('/purchase/detail/{purchase_detail}', 'PurchaseController@destroy_detail')->name('purchase.destroy_detail');
 });

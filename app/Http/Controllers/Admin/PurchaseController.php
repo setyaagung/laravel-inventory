@@ -19,7 +19,8 @@ class PurchaseController extends Controller
      */
     public function index()
     {
-        //
+        $purchases = Purchase::withCount(['purchaseDetails'])->orderBy('created_at', 'DESC')->get();
+        return view('backend.purchase.index', compact('purchases'));
     }
 
     /**
@@ -43,34 +44,34 @@ class PurchaseController extends Controller
     public function store(Request $request)
     {
         try {
-            $product_id = $request->product_id;
+            $product = $request->product_id;
             $qty = $request->qty;
             $document_number = $request->document_number;
             $supplier = $request->supplier_id;
-            $purchase_id = Purchase::insertGetId([
+            $purchase = Purchase::insertGetId([
                 'document_number' => $document_number,
-                'supplier' => $supplier,
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s'),
+                'supplier_id' => $supplier,
+                'created_at' => \date('Y-m-d H:i:s'),
+                'updated_at' => \date('Y-m-d H:i:s')
             ]);
-            foreach ($qty as $e => $q) {
-                if ($q == 0) {
+            foreach ($qty as $e => $qt) {
+                if ($qt == 0) {
                     continue;
                 }
                 $dtProduct = Product::where('id', $product[$e])->first();
                 $buy = $dtProduct->buy;
-                $total = $buy * $q;
+                $total = $qt * $buy;
                 PurchaseDetail::insert([
-                    'purchase_id' => $purchase_id,
-                    'product_id' => $product_id[$e],
-                    'qty' => $q,
+                    'purchase_id' => $purchase,
+                    'product_id' => $product[$e],
+                    'qty' => $qt,
                     'buy' => $buy,
                     'total' => $total
                 ]);
             }
-            \Session::flash('sukses', 'Pemesanan produk berhasil dibuat');
+            \Session::flash('create', 'Pemesanan produk berhasil dibuat');
         } catch (\Exception $e) {
-            \Session::flash('gagal', 'gagal');
+            \Session::flash('error', 'Pemesanan produk gagal');
         }
         return redirect()->back();
     }
@@ -83,7 +84,8 @@ class PurchaseController extends Controller
      */
     public function show($id)
     {
-        //
+        $purchase = Purchase::findOrFail($id);
+        return view('backend.purchase.detail', compact('purchase'));
     }
 
     /**
@@ -126,5 +128,29 @@ class PurchaseController extends Controller
         $products = Product::where('supplier_id', $supplier)->orderBy('name', 'ASC')->get();
         $doc = 'PO' . Carbon::now()->format('Ymd') . rand(10000000000, 99999999999);
         return view('backend.purchase.create', \compact('suppliers', 'products', 'doc', 'supplier'));
+    }
+
+    public function approved($id)
+    {
+        try {
+            Purchase::where('id', $id)->update([
+                'status_id' => 2,
+            ]);
+            \Session::flash('approved', 'Produk yang telah dipesan berhasil disetujui');
+        } catch (\Exception $e) {
+            \Session::flash('error', 'Produk yang telah dipesan belum dapat disetujui');
+        }
+        return redirect()->back();
+    }
+
+    public function destroy_detail($id)
+    {
+        try {
+            PurchaseDetail::where('id', $id)->delete();
+            \Session::flash('delete', 'Produk dalam detail pemesanan berhasil dihapus');
+        } catch (\Exception $e) {
+            \Session::flash('error', 'Produk dalam detail pemesanan gagal dihapus');
+        }
+        return redirect()->back();
     }
 }

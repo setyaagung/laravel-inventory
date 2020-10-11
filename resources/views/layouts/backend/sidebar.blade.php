@@ -31,6 +31,13 @@
         </a>
     </li>
 
+    <li class="nav-item {{ (request()->segment(1) == 'purchase') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('purchase.index')}}">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+        <span>Purchase Order</span>
+        </a>
+    </li>
+
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
 

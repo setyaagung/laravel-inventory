@@ -10,15 +10,24 @@
     </div>
 
     <div class="card shadow mb-4">
-        @if ($message = Session::get('gagal'))
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Perbarui!</strong> {{ $message }}.
+        <div class="card-body">
+            @if ($message = Session::get('create'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>Sukses!</strong> {{ $message }}.
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
             @endif
-        <div class="card-body">
+
+            @if ($message = Session::get('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Gagal!</strong> {{ $message }}.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
             <form action="{{ route('purchase.store')}}" method="POST">
                 @csrf
                 <div class="form-group">
