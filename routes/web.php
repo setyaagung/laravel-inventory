@@ -28,4 +28,6 @@ Route::namespace('Admin')->middleware(['auth'])->group(function () {
     Route::get('/purchase/product/{supplier}', 'PurchaseController@getProduct');
     Route::get('/purchase/approved/{purchase}', 'PurchaseController@approved')->name('purchase.approved');
     Route::delete('/purchase/detail/{purchase_detail}', 'PurchaseController@destroy_detail')->name('purchase.destroy_detail');
+    Route::resource('goodreceipt', 'GoodReceiptController');
+    Route::post('/goodreceipt/{goodreceipt}', 'GoodReceiptController@approved')->name('goodreceipt.approved');
 });

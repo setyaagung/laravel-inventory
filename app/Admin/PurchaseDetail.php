@@ -12,4 +12,14 @@ class PurchaseDetail extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function sumBuy()
+    {
+        return $this->where('purchase_id', $this->purchase_id)->sum('buy');
+    }
+
+    public function sumTotal()
+    {
+        return $this->where('purchase_id', $this->purchase_id)->sum('total');
+    }
 }

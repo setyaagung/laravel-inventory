@@ -81,7 +81,7 @@
                                         <th>Produk</th>
                                         <th style="width: 15%">Qty</th>
                                         <th>Harga Beli</th>
-                                        <th>Total</th>
+                                        <th>Grand Total</th>
                                         <th></th>
                                     </tr>
                                 </thead>

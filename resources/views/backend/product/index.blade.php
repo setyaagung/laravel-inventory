@@ -1,11 +1,11 @@
 @extends('layouts.backend.main')
 
-@section('title','List Product')
+@section('title','List Produk')
 
 @section('content')
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">List Product</h1>
+        <h1 class="h3 mb-0 text-gray-800">List Produk</h1>
         <a href="{{route('product.create')}}" class="btn btn-sm btn-primary shadow-sm">
             Tambah
         </a>

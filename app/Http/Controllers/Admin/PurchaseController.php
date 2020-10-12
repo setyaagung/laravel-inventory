@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Admin\GoodReceipt;
 use App\Admin\Product;
 use App\Admin\Purchase;
 use App\Admin\PurchaseDetail;
@@ -157,6 +158,16 @@ class PurchaseController extends Controller
         try {
             Purchase::where('id', $id)->update([
                 'status_id' => 2,
+            ]);
+
+            GoodReceipt::where('purchase_id', $id)->delete();
+
+            GoodReceipt::insert([
+                'purchase_id' => $id,
+                'document_number' => 'GR' . Carbon::now()->format('Ymd') . rand(10000000000, 99999999999),
+                'status_id' => 1,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
             ]);
             \Session::flash('approved', 'Produk yang telah dipesan berhasil disetujui');
         } catch (\Exception $e) {

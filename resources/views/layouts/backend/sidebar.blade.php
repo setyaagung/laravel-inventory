@@ -20,21 +20,28 @@
     </li>
     <li class="nav-item {{ (request()->segment(1) == 'supplier') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('supplier.index')}}">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <i class="fas fa-fw fa-user-friends"></i>
         <span>Supplier</span>
         </a>
     </li>
     <li class="nav-item {{ (request()->segment(1) == 'product') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('product.index')}}">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-        <span>Product</span>
+            <i class="fas fa-fw fa-box"></i>
+        <span>Produk</span>
         </a>
     </li>
 
     <li class="nav-item {{ (request()->segment(1) == 'purchase') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('purchase.index')}}">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-        <span>Purchase Order</span>
+            <i class="fas fa-fw fa-cart-plus"></i>
+        <span>Pemesanan</span>
+        </a>
+    </li>
+
+    <li class="nav-item {{ (request()->segment(1) == 'goodreceipt') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('goodreceipt.index')}}">
+            <i class="fas fa-fw fa-receipt"></i>
+        <span>Good Receipt</span>
         </a>
     </li>
 
