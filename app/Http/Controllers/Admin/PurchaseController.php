@@ -108,7 +108,29 @@ class PurchaseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $qty = $request->qty;
+            $buy = $request->buy;
+            $product_id = $request->product_id;
+            $id = $request->id;
+
+            foreach ($qty as $e => $q) {
+                $data['qty'] = $q;
+                $data['buy'] = $buy[$e];
+                $data['total'] = $q * $buy[$e];
+                $detail = $id[$e];
+
+                PurchaseDetail::where('id', $detail)->update($data);
+
+                Product::where('id', $product_id[$e])->update([
+                    'buy' => $data['buy'],
+                ]);
+            }
+            \Session::flash('success', 'Data pemesanan produk berhasil diperbarui');
+        } catch (\Exception $e) {
+            \Session::flash('error', 'Data pemesanan produk gagal diperbarui');
+        }
+        return redirect()->back();
     }
 
     /**

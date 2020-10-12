@@ -10,6 +10,15 @@
 
     <div class="card shadow mb-4">
         <div class="card-body">
+            @if ($message = Session::get('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>Diperbarui!</strong> {{ $message }}.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+
             @if ($message = Session::get('delete'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     <strong>Dihapus!</strong> {{ $message }}.
@@ -62,70 +71,87 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Produk</th>
-                                    <th>Qty</th>
-                                    <th>Harga Beli</th>
-                                    <th>Total</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @php
-                                    $total_qty = 0;
-                                    $total_buy = 0;
-                                    $total = 0;
-                                @endphp
-                                @foreach ($purchase->purchaseDetails as $detail)
-                                    @php
-                                        $total_qty += $detail->qty;
-                                        $total_buy += $detail->buy;
-                                        $total += $detail->total;
-                                    @endphp
+                        <form action="{{ route('purchase.update',$purchase->id)}}" method="POST">
+                            @csrf
+                            @method('PATCH')
+                            <table class="table table-hover">
+                                <thead>
                                     <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $detail->product->name }}</td>
-                                        <td>{{ $detail->qty }}</td>
-                                        <td>Rp. {{ number_format($detail->buy,2,',','.') }}</td>
-                                        <td>Rp. {{ number_format($detail->total,2,',','.') }}</td>
-                                        <td>
-                                            <form action="{{ route('purchase.destroy_detail',$detail->id)}}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin dihapus?')">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </form>
-                                        </td>
+                                        <th>No</th>
+                                        <th>Produk</th>
+                                        <th style="width: 15%">Qty</th>
+                                        <th>Harga Beli</th>
+                                        <th>Total</th>
+                                        <th></th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th colspan="2">
-                                        <b><i>Jumlah</i></b>
-                                    </th>
-                                    <th>
-                                        <b><i>{{ $total_qty }}</i></b>
-                                    </th>
-                                    <th>
-                                        <b><i>Rp. {{ number_format($total_buy,2,',','.') }}</i></b>
-                                    </th>
-                                    <th>
-                                        <b><i>Rp. {{ number_format($total,2,',','.') }}</i></b>
-                                    </th>
-                                    <th></th>
-                                </tr>
-                            </tfoot>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @php
+                                        $total_qty = 0;
+                                        $total_buy = 0;
+                                        $total = 0;
+                                    @endphp
+                                    @foreach ($purchase->purchaseDetails as $detail)
+                                        @php
+                                            $total_qty += $detail->qty;
+                                            $total_buy += $detail->buy;
+                                            $total += $detail->total;
+                                        @endphp
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $detail->product->name }}</td>
+                                            <td>
+                                                @if ($purchase->status_id == 1)
+                                                    <input type="number" class="form-control" name="qty[]" value="{{ $detail->qty }}">
+                                                    <input type="hidden" name="id[]" value="{{ $detail->id }}">
+                                                    <input type="hidden" name="product_id[]" value="{{ $detail->product_id }}">
+                                                @else
+                                                    {{ $detail->qty }}
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($purchase->status_id == 1)
+                                                    <input type="number" class="form-control" name="buy[]" value="{{ $detail->buy }}">
+                                                @else
+                                                    Rp. {{ number_format($detail->buy,2,',','.') }}
+                                                @endif
+                                            </td>
+                                            <td>Rp. {{ number_format($detail->total,2,',','.') }}</td>
+                                            <td>
+                                                
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="2">
+                                            <b><i>Jumlah</i></b>
+                                        </th>
+                                        <th>
+                                            <b><i>{{ $total_qty }}</i></b>
+                                        </th>
+                                        <th>
+                                            <b><i>Rp. {{ number_format($total_buy,2,',','.') }}</i></b>
+                                        </th>
+                                        <th>
+                                            <b><i>Rp. {{ number_format($total,2,',','.') }}</i></b>
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            <div class="float-right">
+                                @if ($purchase->status_id == 1)
+                                    <a href="{{ route('purchase.index')}}" class="btn btn-secondary">Kembali</a>
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                @else
+                                    <a href="{{ route('purchase.index')}}" class="btn btn-secondary">Kembali</a>
+                                @endif
+                            </div>
+                        </form>
                     </div>
                 </div>
-            </div>
-            <div class="float-right">
-                <a href="{{ route('purchase.index')}}" class="btn btn-secondary">Kembali</a>
             </div>
         </div>
     </div>
