@@ -20,8 +20,8 @@ class CreateProductsTable extends Migration
             $table->string('name');
             $table->integer('stock');
             $table->integer('minimum_stock');
-            $table->decimal('buy', 15, 2);
-            $table->decimal('sell', 15, 2);
+            $table->bigInteger('buy');
+            $table->bigInteger('sell');
             $table->timestamps();
 
             $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('restrict');
