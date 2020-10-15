@@ -45,6 +45,13 @@
         </a>
     </li>
 
+    <li class="nav-item {{ (request()->segment(1) == 'sale') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('sale.create')}}">
+            <i class="fas fa-fw fa-receipt"></i>
+        <span>POS</span>
+        </a>
+    </li>
+
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
 

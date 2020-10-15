@@ -30,6 +30,9 @@ Route::namespace('Admin')->middleware(['auth'])->group(function () {
     Route::delete('/purchase/detail/{purchase_detail}', 'PurchaseController@destroy_detail')->name('purchase.destroy_detail');
     Route::resource('goodreceipt', 'GoodReceiptController');
     Route::post('/goodreceipt/{goodreceipt}', 'GoodReceiptController@approved')->name('goodreceipt.approved');
-    Route::resource('pos', 'PosController');
-    Route::get('/product/ajax/{code}', 'PosController@getProduct');
+    Route::resource('sale', 'SaleController');
+    //cart
+    Route::post('/sale/addproduct/{product}', 'SaleController@addProduct')->name('sale.addproduct');
+    Route::delete('/sale/removeproduct/{product}', 'SaleController@removeProduct')->name('sale.removeproduct');
+    Route::post('/sale/clear', 'SaleController@clear')->name('sale.clear');
 });

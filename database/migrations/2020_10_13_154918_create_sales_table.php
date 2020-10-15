@@ -15,7 +15,10 @@ class CreateSalesTable extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
-            $table->string('sale_number');
+            $table->string('invoice');
+            $table->unsignedBigInteger('user_id');
+            $table->bigInteger('total');
+            $table->text('information')->nullable();
             $table->timestamps();
         });
     }

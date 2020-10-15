@@ -175,7 +175,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Milon\Barcode\BarcodeServiceProvider::class,
-
+        Darryldecode\Cart\CartServiceProvider::class,
     ],
 
     /*
@@ -229,7 +229,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
         'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
-
+        'Cart' => Darryldecode\Cart\Facades\CartFacade::class
     ],
 
 ];
