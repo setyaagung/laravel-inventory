@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Admin\Product;
+use App\Admin\Sale;
+use App\Admin\SaleDetail;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Darryldecode\Cart\Cart;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class SaleController extends Controller
 {
@@ -17,9 +20,16 @@ class SaleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $first_date = date('Y-m-d', strtotime($request->first_date));
+        $last_date = date('Y-m-d', strtotime($request->last_date));
+        if ($request->has('first_date', 'last_date')) {
+            $sales = Sale::whereDate('created_at', '>=', $first_date)->whereDate('created_at', '<=', $last_date)->orderBy('created_at', 'desc')->get();
+        } else {
+            $sales = Sale::orderBy('created_at', 'desc')->get();
+        }
+        return view('backend.sale.index', compact('sales'));
     }
 
     /**
@@ -29,8 +39,11 @@ class SaleController extends Controller
      */
     public function create(Request $request)
     {
-        $products = Product::orderBy('name', 'ASC')->get();
-        $invoice = Carbon::now()->format('Ymd') . Str::random(8);
+        if ($request->has('search')) {
+            $products = Product::orderBy('name', 'ASC')->where('name', 'LIKE', '%' . $request->search . '%')->paginate(5);
+        } else {
+            $products = Product::orderBy('name', 'ASC')->paginate(5);
+        }
 
         //cart item
         if (request()->tax) {
@@ -77,7 +90,7 @@ class SaleController extends Controller
             'tax' => $tax
         ];
 
-        return view('backend.sale.create', compact('products', 'invoice', 'cartData', 'data_total'));
+        return view('backend.sale.create', compact('products', 'cartData', 'data_total'));
     }
 
     /**
@@ -99,7 +112,8 @@ class SaleController extends Controller
      */
     public function show($id)
     {
-        //
+        $sale = Sale::findOrFail($id);
+        return view('backend.sale.detail', compact('sale'));
     }
 
     /**
@@ -136,6 +150,12 @@ class SaleController extends Controller
         //
     }
 
+    public function filter(Request $request)
+    {
+        $first_date = date('Y-m-d', strtotime($request->first_date));
+        $last_date = date('Y-m-d', strtotime($request->last_date));
+    }
+
     public function addProduct($id)
     {
         $product = Product::findOrFail($id);
@@ -170,9 +190,109 @@ class SaleController extends Controller
         \Cart::session(Auth()->id())->remove($id);
         return redirect()->back();
     }
+    public function decreasecart($id)
+    {
+        $product = Product::findOrFail($id);
+
+        $cart = \Cart::session(Auth()->id())->getContent();
+        $checkItemId = $cart->whereIn('id', $id);
+
+        if ($checkItemId[$id]->quantity == 1) {
+            \Cart::session(Auth()->id())->remove($id);
+        } else {
+            \Cart::session(Auth()->id())->update($id, array(
+                'quantity' => array(
+                    'relative' => true,
+                    'value' => -1
+                )
+            ));
+        }
+        return redirect()->back();
+    }
+    public function increasecart($id)
+    {
+        $product = Product::findOrFail($id);
+
+        $cart = \Cart::session(Auth()->id())->getContent();
+        $checkItemId = $cart->whereIn('id', $id);
+
+        if ($product->stock == $checkItemId[$id]->quantity) {
+            return redirect()->back()->with('error', 'Stok produk mencapai jumlah maximum | Silahkan tambah stok terlebih dahulu.');
+        } else {
+            \Cart::session(Auth()->id())->update($id, array(
+                'quantity' => array(
+                    'relative' => true,
+                    'value' => 1
+                )
+            ));
+
+            return redirect()->back();
+        }
+    }
     public function clear()
     {
         \Cart::session(Auth()->id())->clear();
         return redirect()->back();
+    }
+
+    public function pay(Request $request)
+    {
+        $cart_total = \Cart::session(Auth()->id())->getTotal();
+        $pay = request()->pay;
+        $change = (int)$pay - (int)$cart_total;
+
+        if ($change >= 0) {
+            DB::beginTransaction();
+
+            try {
+
+                $all_cart = \Cart::session(Auth()->id())->getContent();
+
+
+                $filterCart = $all_cart->map(function ($item) {
+                    return [
+                        'id' => $item->id,
+                        'quantity' => $item->quantity
+                    ];
+                });
+
+                foreach ($filterCart as $cart) {
+                    $product = Product::findOrFail($cart['id']);
+
+                    if ($product->stock == 0) {
+                        return redirect()->back()->with('errorSale', 'jumlah pembayaran gak valid');
+                    }
+
+                    $product->decrement('stock', $cart['quantity']);
+                }
+
+                $sale = Sale::create([
+                    'invoice' => Carbon::now()->format('Ymd') . Str::random(8),
+                    'user_id' => Auth::id(),
+                    'information' => $request->information,
+                    'pay' => request()->pay,
+                    'pay_method' => $request->pay_method,
+                    'total' => $cart_total
+                ]);
+
+                foreach ($filterCart as $cart) {
+
+                    SaleDetail::create([
+                        'sale_id' => $sale->id,
+                        'product_id' => $cart['id'],
+                        'qty' => $cart['quantity'],
+                    ]);
+                }
+
+                \Cart::session(Auth()->id())->clear();
+
+                DB::commit();
+                return redirect()->back()->with('success', 'Transaksi Berhasil dilakukan | Klik History untuk print');
+            } catch (\Exeception $e) {
+                DB::rollback();
+                return redirect()->back()->with('errorSale', 'jumlah pembayaran tidak valid');
+            }
+        }
+        return redirect()->back()->with('errorSale', 'jumlah pembayaran tidak valid');
     }
 }

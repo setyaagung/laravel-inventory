@@ -31,8 +31,12 @@ Route::namespace('Admin')->middleware(['auth'])->group(function () {
     Route::resource('goodreceipt', 'GoodReceiptController');
     Route::post('/goodreceipt/{goodreceipt}', 'GoodReceiptController@approved')->name('goodreceipt.approved');
     Route::resource('sale', 'SaleController');
+    Route::get('/sale/filter', 'SaleController@filter')->name('sale.filter');
     //cart
     Route::post('/sale/addproduct/{product}', 'SaleController@addProduct')->name('sale.addproduct');
     Route::delete('/sale/removeproduct/{product}', 'SaleController@removeProduct')->name('sale.removeproduct');
+    Route::post('/sale/decreasecart/{product}', 'SaleController@decreasecart')->name('sale.decreasecart');
+    Route::post('/sale/increasecart/{product}', 'SaleController@increasecart')->name('sale.increasecart');
     Route::post('/sale/clear', 'SaleController@clear')->name('sale.clear');
+    Route::post('/sale/pay', 'SaleController@pay')->name('sale.pay');
 });

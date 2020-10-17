@@ -47,8 +47,8 @@
 
     <li class="nav-item {{ (request()->segment(1) == 'sale') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('sale.create')}}">
-            <i class="fas fa-fw fa-receipt"></i>
-        <span>POS</span>
+            <i class="fas fa-fw fa-shopping-cart"></i>
+        <span>Penjualan</span>
         </a>
     </li>
 

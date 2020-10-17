@@ -1,12 +1,12 @@
 @extends('layouts.backend.main')
 
-@section('title','List Purchase Order')
+@section('title','List Pemesanan')
 
 @section('content')
     <!-- Page Heading -->
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">List Purchase Order</h1>
+        <h1 class="h3 mb-0 text-gray-800">List Pemesanan</h1>
         <a href="{{route('purchase.create')}}" class="btn btn-sm btn-primary shadow-sm">
             Tambah
         </a>

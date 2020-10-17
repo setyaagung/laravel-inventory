@@ -18,6 +18,8 @@ class CreateSalesTable extends Migration
             $table->string('invoice');
             $table->unsignedBigInteger('user_id');
             $table->bigInteger('total');
+            $table->bigInteger('pay');
+            $table->string('pay_method');
             $table->text('information')->nullable();
             $table->timestamps();
         });
