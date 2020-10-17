@@ -295,4 +295,10 @@ class SaleController extends Controller
         }
         return redirect()->back()->with('errorSale', 'jumlah pembayaran tidak valid');
     }
+
+    public function invoice($id)
+    {
+        $sale = Sale::findOrFail($id);
+        return view('backend.sale.invoice', compact('sale'));
+    }
 }

@@ -52,6 +52,13 @@
         </a>
     </li>
 
+    <li class="nav-item {{ (request()->segment(1) == 'company') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('company.index')}}">
+            <i class="fas fa-fw fa-building"></i>
+        <span>Profil Perusahaan</span>
+        </a>
+    </li>
+
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
 

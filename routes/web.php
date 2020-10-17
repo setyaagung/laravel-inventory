@@ -39,4 +39,9 @@ Route::namespace('Admin')->middleware(['auth'])->group(function () {
     Route::post('/sale/increasecart/{product}', 'SaleController@increasecart')->name('sale.increasecart');
     Route::post('/sale/clear', 'SaleController@clear')->name('sale.clear');
     Route::post('/sale/pay', 'SaleController@pay')->name('sale.pay');
+    //nomor nota
+    Route::get('/sale/invoice/{sale}', 'SaleController@invoice')->name('sale.invoice');
+    //profil perusahaan
+    Route::get('/company', 'CompanyController@index')->name('company.index');
+    Route::patch('/company/{company}', 'CompanyController@update')->name('company.update');
 });

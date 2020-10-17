@@ -61,7 +61,9 @@
                                     <td>Transfer</td>
                                 @endif
                                 <td>{{ $sale->created_at->isoFormat('D MMMM Y')}}</td>
-                                <td></td>
+                                <td>
+                                    <a href="{{ route('sale.invoice',$sale->id)}}" class="btn btn-sm btn-success" target="_blank"><i class="fas fa-file-invoice"></i> Nota</a>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
