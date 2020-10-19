@@ -102,21 +102,15 @@
                                         <td>{{ $loop->iteration}}</td>
                                         <td>{{ $item['name']}}</td>
                                         <td>
-                                            <div class="input-group">
-                                                <form action="{{ route('sale.decreasecart',$item['rowId'])}}" method="POST">
-                                                    @csrf
-                                                    <div class="input-group-prepend">
-                                                        <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-minus"></i></button>
-                                                    </div>
-                                                </form>
-                                                <input type="text" class="form-control form-control-sm" value="{{ $item['qty']}}" disabled>
-                                                <form action="{{ route('sale.increasecart',$item['rowId'])}}" method="POST">
-                                                    @csrf
+                                            <form action="{{ route('sale.updatecart',$item['rowId'])}}" method="POST">
+                                                @csrf
+                                                <div class="input-group">
+                                                    <input type="number" name="quantity" class="form-control form-control-sm" value="{{ $item['qty']}}">
                                                     <div class="input-group-append">
-                                                        <button type="submit" class="btn btn-sm btn-success"><i class="fas fa-plus"></i></button>
+                                                        <button type="submit" class="btn btn-sm btn-success"><i class="fas fa-check"></i></button>
                                                     </div>
-                                                </form>
-                                            </div>
+                                                </div>
+                                            </form>
                                         </td>
                                         <td>Rp. {{ number_format($item['pricesingle'],0,',','.')}}</td>
                                         <td>Rp. {{ number_format($item['price'],0,',','.')}}</td>

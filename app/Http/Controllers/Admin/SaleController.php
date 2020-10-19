@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Darryldecode\Cart\Cart;
+use PDF;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -190,39 +191,22 @@ class SaleController extends Controller
         \Cart::session(Auth()->id())->remove($id);
         return redirect()->back();
     }
-    public function decreasecart($id)
+
+    public function updatecart(Request $request, $id)
     {
         $product = Product::findOrFail($id);
 
         $cart = \Cart::session(Auth()->id())->getContent();
         $checkItemId = $cart->whereIn('id', $id);
+        $quantity = $request->quantity;
 
-        if ($checkItemId[$id]->quantity == 1) {
-            \Cart::session(Auth()->id())->remove($id);
-        } else {
-            \Cart::session(Auth()->id())->update($id, array(
-                'quantity' => array(
-                    'relative' => true,
-                    'value' => -1
-                )
-            ));
-        }
-        return redirect()->back();
-    }
-    public function increasecart($id)
-    {
-        $product = Product::findOrFail($id);
-
-        $cart = \Cart::session(Auth()->id())->getContent();
-        $checkItemId = $cart->whereIn('id', $id);
-
-        if ($product->stock == $checkItemId[$id]->quantity) {
+        if ($product->stock < $quantity) {
             return redirect()->back()->with('error', 'Stok produk mencapai jumlah maximum | Silahkan tambah stok terlebih dahulu.');
         } else {
             \Cart::session(Auth()->id())->update($id, array(
                 'quantity' => array(
-                    'relative' => true,
-                    'value' => 1
+                    'relative' => false,
+                    'value' => $quantity
                 )
             ));
 
@@ -296,9 +280,10 @@ class SaleController extends Controller
         return redirect()->back()->with('errorSale', 'jumlah pembayaran tidak valid');
     }
 
-    public function invoice($id)
+    public function invoice($invoice)
     {
-        $sale = Sale::findOrFail($id);
-        return view('backend.sale.invoice', compact('sale'));
+        $sale = Sale::where('invoice', $invoice)->firstOrFail();
+        $pdf = PDF::loadView('backend.sale.invoice', compact('sale'))->setPaper('4x6in.', 'potrait');
+        return $pdf->stream();
     }
 }
