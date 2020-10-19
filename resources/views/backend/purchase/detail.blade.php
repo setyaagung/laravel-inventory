@@ -118,7 +118,7 @@
                                             </td>
                                             <td>Rp. {{ number_format($detail->total,2,',','.') }}</td>
                                             <td>
-                                                
+                                                <button class="btn btn-sm btn-danger btn-delete"><i class="fas fa-trash"></i></button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -155,4 +155,40 @@
             </div>
         </div>
     </div>
+
+    <!-- MODAL DELETE DETAIL PEMESANAN PRODUK -->
+    <div class="modal fade" id="modalHapus" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title text-light" id="exampleModalLabel">Hapus Produk</h5>
+                    <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{ route('purchase.destroy_detail',$detail->id)}}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <div class="modal-body">
+                        Apakah anda yakin ingin menghapus produk dalam pemesanan ini ?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Iya, Hapus</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function(){
+            $('.btn-delete').click(function(e){
+                e.preventDefault();
+                $('#modalHapus').modal();
+            })
+        });
+    </script>
+@endpush
