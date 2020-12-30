@@ -10,6 +10,7 @@ use App\Admin\Supplier;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class PurchaseController extends Controller
 {
@@ -32,7 +33,7 @@ class PurchaseController extends Controller
     public function create()
     {
         $suppliers = Supplier::orderBy('name', 'ASC')->get();
-        $doc = 'PO' . Carbon::now()->format('Ymd') . rand(10000000000, 99999999999);
+        $doc = 'PO' . Carbon::now()->format('Ymd') . Str::random(8);
         return view('backend.purchase.create', compact('suppliers', 'doc'));
     }
 
@@ -149,7 +150,7 @@ class PurchaseController extends Controller
     {
         $suppliers = Supplier::orderBy('name', 'ASC')->get();
         $products = Product::where('supplier_id', $supplier)->orderBy('name', 'ASC')->get();
-        $doc = 'PO' . Carbon::now()->format('Ymd') . rand(10000000000, 99999999999);
+        $doc = 'PO' . Carbon::now()->format('Ymd') . Str::random(8);
         return view('backend.purchase.create', \compact('suppliers', 'products', 'doc', 'supplier'));
     }
 
@@ -164,7 +165,7 @@ class PurchaseController extends Controller
 
             GoodReceipt::insert([
                 'purchase_id' => $id,
-                'document_number' => 'GR' . Carbon::now()->format('Ymd') . rand(10000000000, 99999999999),
+                'document_number' => 'GR' . Carbon::now()->format('Ymd') . Str::random(8),
                 'status_id' => 1,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),

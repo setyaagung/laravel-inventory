@@ -11,8 +11,8 @@
 
     <title>{{ $sale->invoice}}</title>
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <!-- Custom styles for this template-->
+    <link href="{{ asset('backend/css/sb-admin-2.min.css')}}" rel="stylesheet">
 
 </head>
 
@@ -32,26 +32,28 @@
             @endforeach
         </div>
         <hr class="mb-1 mt-1" style="border: dashed">
-        <div class="row" style="font-size: 12px">
-            <div class="col-sm-6">
-                <p class="mb-0">No Invoice</p>
-                <p class="mb-0">Kasir</p>
-                <p class="mb-0">Tanggal</p>
-            </div>
-            <div class="col-sm-6 text-right" style="float: right;">
-                <p class="mb-0">{{$sale->invoice}}</p>
-                <p class="mb-0">{{ $sale->user->name}}</p>
-                <p>{{ date('Y-m-d : H:i:s', strtotime($sale->created_at)) }}</p>
-            </div>
-        </div>
+        <table style="width: 100%;font-size: 12px">
+            <tr>
+                <td>No Invoice</td>
+                <td style="text-align: right">{{ $sale->invoice}}</td>
+            </tr>
+            <tr>
+                <td>Kasir</td>
+                <td style="text-align: right">{{$sale->user->name}}</td>
+            </tr>
+            <tr>
+                <td>Tanggal</td>
+                <td style="text-align: right">{{date($sale->created_at)}}</td>
+            </tr>
+        </table>
         <hr class="mb-1 mt-1" style="border: dashed">
-        <table class="table-sm table-borderless" style="font-size: 12px">
+        <table class="table-sm table-borderless" style="width: 100%;font-size: 12px">
             <thead>
                 <tr>
                     <td><b>Produk</b></td>
                     <td><b>Qty</b></td>
                     <td><b>Harga</b></td>
-                    <td><b>Total</b></td>
+                    <td style="text-align: right"><b>Total</b></td>
                 </tr>
             </thead>
             <tbody>
@@ -60,32 +62,41 @@
                         <td>{{ $detail->product->name}}</td>
                         <td>{{ $detail->qty}} x</td>
                         <td>Rp {{ number_format($detail->product->sell) }}</td>
-                        <td>Rp {{ number_format($detail->qty * $detail->product->sell) }}</td>
+                        <td style="text-align: right">Rp {{ number_format($detail->qty * $detail->product->sell) }}</td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
         <hr class="mb-1 mt-1" style="border: dashed">
-        <div class="row" style="font-size: 12px">
-            <div class="col-sm-6">
-                <p class="mb-0">Grand Total</p>
-                <p class="mb-0">Pembayaran</p>
-                <p class="mb-0">Kembalian</p>
-            </div>
-            <div class="col-sm-6 text-right" style="float: right;">
-                <p class="mb-0"><b>Rp {{ number_format($sale->total) }}</b></p>
-                <p class="mb-0">Rp {{ number_format($sale->pay) }}</p>
-                <p>Rp {{ number_format($sale->pay - $sale->total) }}</p>
-            </div>
-        </div>
-        <hr class="mb-3 mt-1" style="border: dashed">
-        <div style="text-align: center;""\>
-            <h4 class="m-0">Terimakasih</h4>
+        <table style="width: 100%;font-size: 12px">
+            <tr>
+                <td>Grand Total</td>
+                <td style="text-align: right"><b>Rp {{ number_format($sale->total)}}</b></td>
+            </tr>
+            <tr>
+                <td>Pembayaran</td>
+                <td style="text-align: right">Rp {{ number_format($sale->pay)}}</td>
+            </tr>
+            <tr>
+                <td>Kembalian</td>
+                <td style="text-align: right">Rp {{ number_format($sale->pay - $sale->total)}}</td>
+            </tr>
+        </table>
+        <hr class="mt-1" style="border: dashed">
+        <div style="text-align: center;margin-top: -10px">
+            <h4>Terimakasih</h4>
             <p>Silahkan berkunjung kembali</p>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="{{ asset('backend/vendor/jquery/jquery.min.js')}}"></script>
+    <script src="{{ asset('backend/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="{{ asset('backend/vendor/jquery-easing/jquery.easing.min.js')}}"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="{{ asset('backend/js/sb-admin-2.min.js')}}"></script>
 
 </body>
 
